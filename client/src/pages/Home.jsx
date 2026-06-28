@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { FaBook, FaSearch, FaTrash, FaFileAlt } from "react-icons/fa";
+import {
+  FaBook,
+  FaSearch,
+  FaTrash,
+  FaFileAlt,
+  FaCalendarAlt,
+  FaEye,
+} from "react-icons/fa";
 import api from "../services/api";
 
 function Home() {
@@ -52,54 +59,70 @@ function Home() {
         />
       </div>
 
-<div className="stats">
-  <div className="stat-card">
-    <h3>Total Notes</h3>
-    <p>{notes.length}</p>
-  </div>
+      <div className="stats">
+        <div className="stat-card">
+          <h3>Total Notes</h3>
+          <p>{notes.length}</p>
+        </div>
 
-  <div className="stat-card">
-    <h3>Search Results</h3>
-    <p>{filteredNotes.length}</p>
-  </div>
+        <div className="stat-card">
+          <h3>Search Results</h3>
+          <p>{filteredNotes.length}</p>
+        </div>
 
-  <div className="stat-card">
-    <h3>Subjects</h3>
-    <p>{new Set(notes.map((note) => note.subject)).size}</p>
-  </div>
-</div>
-      {filteredNotes.length === 0 ? (
-        <p>No notes found.</p>
-      ) : (
-        filteredNotes.map((note) => (
-          <div className="card" key={note._id}>
-            <h2><FaFileAlt /> {note.title}</h2>
+        <div className="stat-card">
+          <h3>Subjects</h3>
+          <p>{new Set(notes.map((note) => note.subject)).size}</p>
+        </div>
+      </div>
 
-            <p><b>Subject:</b> {note.subject}</p>
-            <p><b>Description:</b> {note.description}</p>
+      <div className="notes-grid">
+        {filteredNotes.length === 0 ? (
+          <p>No notes found.</p>
+        ) : (
+          filteredNotes.map((note) => (
+            <div className="note-card" key={note._id}>
+              <div className="note-icon">
+                <FaFileAlt />
+              </div>
 
-            <p>
-            <b>Uploaded:</b>{" "}
-            {new Date(note.createdAt).toLocaleDateString()}
-            </p>
-            <a
-              href={`http://localhost:5001/${note.filePath}`}
-              target="_blank"
-              rel="noreferrer"
-              className="file-link"
-            >
-              View File
-            </a>
+              <div className="note-content">
+                <h2>{note.title}</h2>
 
-            <button
-              className="delete-btn"
-              onClick={() => deleteNote(note._id)}
-            >
-              <FaTrash /> Delete
-            </button>
-          </div>
-        ))
-      )}
+                <span className="subject-badge">
+                  {note.subject}
+                </span>
+
+                <p className="note-description">
+                  {note.description}
+                </p>
+
+                <p className="note-date">
+                  <FaCalendarAlt />{" "}
+                  {new Date(note.createdAt).toLocaleDateString()}
+                </p>
+
+                <div className="note-actions">
+                  <a
+                    href={`http://localhost:5001/${note.filePath}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <FaEye /> View File
+                  </a>
+
+                  <button
+                    className="delete-btn"
+                    onClick={() => deleteNote(note._id)}
+                  >
+                    <FaTrash /> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 }
