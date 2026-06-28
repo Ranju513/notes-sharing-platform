@@ -7,7 +7,25 @@ const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    const userExists = await User.findOne({ email });
+    if (!name || !name.trim()) {
+      return res.status(400).json({ message: "Name is required" });
+    }
+
+    if (!email || !email.trim()) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    if (!password || !password.trim()) {
+      return res.status(400).json({ message: "Password is required" });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({
+        message: "Password must be at least 6 characters",
+      });
+    }
+
+    const userExists = await User.findOne({ email: email.toLowerCase() });
 
     if (userExists) {
       return res.status(400).json({
@@ -18,14 +36,18 @@ const register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
-      name,
-      email,
+      name: name.trim(),
+      email: email.toLowerCase().trim(),
       password: hashedPassword,
     });
 
     res.status(201).json({
       message: "User Registered Successfully",
-      user,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
     });
   } catch (error) {
     res.status(500).json({
@@ -39,7 +61,15 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    if (!email || !email.trim()) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    if (!password || !password.trim()) {
+      return res.status(400).json({ message: "Password is required" });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase().trim() });
 
     if (!user) {
       return res.status(400).json({
@@ -47,10 +77,7 @@ const login = async (req, res) => {
       });
     }
 
-    const checkPassword = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const checkPassword = await bcrypt.compare(password, user.password);
 
     if (!checkPassword) {
       return res.status(400).json({
@@ -61,10 +88,9 @@ const login = async (req, res) => {
     const token = jwt.sign(
       { id: user._id },
       process.env.JWT_SECRET,
-      {
-        expiresIn: "7d",
-      }
+      { expiresIn: "7d" }
     );
+
     res.json({
       message: "Login Successful",
       token,
@@ -72,8 +98,8 @@ const login = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-  },
-});
+      },
+    });
   } catch (error) {
     res.status(500).json({
       message: error.message,
