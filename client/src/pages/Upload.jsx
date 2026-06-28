@@ -25,24 +25,26 @@ function Upload() {
   };
 
   return (
-    <div style={{ padding: "30px" }}>
-      <h2>Upload Notes</h2>
+    <div className="page">
+      <h1>Upload Notes</h1>
 
-      <form onSubmit={handleSubmit}>
-        <input placeholder="Title" onChange={(e) => setTitle(e.target.value)} />
-        <br /><br />
+      <div className="card">
+        <form onSubmit={handleSubmit}>
+          <input placeholder="Note Title" onChange={(e) => setTitle(e.target.value)} />
+          <br /><br />
 
-        <input placeholder="Subject" onChange={(e) => setSubject(e.target.value)} />
-        <br /><br />
+          <input placeholder="Subject" onChange={(e) => setSubject(e.target.value)} />
+          <br /><br />
 
-        <textarea placeholder="Description" onChange={(e) => setDescription(e.target.value)} />
-        <br /><br />
+          <textarea placeholder="Short Description" onChange={(e) => setDescription(e.target.value)} />
+          <br /><br />
 
-        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-        <br /><br />
+          <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+          <br /><br />
 
-        <button type="submit">Upload</button>
-      </form>
+          <button type="submit">Upload Note</button>
+        </form>
+      </div>
     </div>
   );
 }

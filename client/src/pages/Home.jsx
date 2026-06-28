@@ -52,8 +52,22 @@ function Home() {
         />
       </div>
 
-      <h2>Total Notes: {filteredNotes.length}</h2>
+<div className="stats">
+  <div className="stat-card">
+    <h3>Total Notes</h3>
+    <p>{notes.length}</p>
+  </div>
 
+  <div className="stat-card">
+    <h3>Search Results</h3>
+    <p>{filteredNotes.length}</p>
+  </div>
+
+  <div className="stat-card">
+    <h3>Subjects</h3>
+    <p>{new Set(notes.map((note) => note.subject)).size}</p>
+  </div>
+</div>
       {filteredNotes.length === 0 ? (
         <p>No notes found.</p>
       ) : (
@@ -64,6 +78,10 @@ function Home() {
             <p><b>Subject:</b> {note.subject}</p>
             <p><b>Description:</b> {note.description}</p>
 
+            <p>
+            <b>Uploaded:</b>{" "}
+            {new Date(note.createdAt).toLocaleDateString()}
+            </p>
             <a
               href={`http://localhost:5001/${note.filePath}`}
               target="_blank"

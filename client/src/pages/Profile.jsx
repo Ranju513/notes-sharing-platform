@@ -1,18 +1,23 @@
 function Profile() {
   const user = JSON.parse(localStorage.getItem("user"));
 
-  return (
-    <div style={{ padding: "30px" }}>
-      <h2>My Profile</h2>
+  const firstLetter = user?.name?.charAt(0).toUpperCase();
 
-      {user ? (
-        <>
-          <p><b>Name:</b> {user.name}</p>
-          <p><b>Email:</b> {user.email}</p>
-        </>
-      ) : (
-        <p>Please login first.</p>
-      )}
+  return (
+    <div className="page">
+      <div className="profile-card">
+        {user ? (
+          <>
+            <div className="avatar">{firstLetter}</div>
+
+            <h2>{user.name}</h2>
+            <p><b>Email:</b> {user.email}</p>
+            <p><b>Role:</b> Student</p>
+          </>
+        ) : (
+          <p>Please login first.</p>
+        )}
+      </div>
     </div>
   );
 }

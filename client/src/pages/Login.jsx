@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import api from "../services/api";
 
 function Login() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -24,7 +26,9 @@ function Login() {
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
       alert(res.data.message);
-    } catch (err) {
+      navigate("/");
+      window.location.reload();
+  } catch (err) {
       alert(err.response?.data?.message || "Login Failed");
     }
   };
