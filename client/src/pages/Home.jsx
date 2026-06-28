@@ -152,7 +152,7 @@ function Home() {
 
                     {files.length === 1 && (
                       <a
-                        href={`http://localhost:5001/${files[0].filePath}`}
+                        href={`https://notes-sharing-platform-lofj.onrender.com/${files[0].filePath}`}
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -186,7 +186,7 @@ function Home() {
                       {files.map((file, index) => (
                         <a
                           key={index}
-                          href={`http://localhost:5001/${file.filePath}`}
+                          href={`https://notes-sharing-platform-lofj.onrender.com/${file.filePath}`}
                           target="_blank"
                           rel="noreferrer"
                         >
