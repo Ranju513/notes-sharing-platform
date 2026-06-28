@@ -35,8 +35,12 @@ function Navbar() {
         setMenuOpen(false);
       }
     };
+
     document.addEventListener("mousedown", closeMenu);
-    return () => document.removeEventListener("mousedown", closeMenu);
+
+    return () => {
+      document.removeEventListener("mousedown", closeMenu);
+    };
   }, []);
 
   return (
@@ -56,7 +60,10 @@ function Navbar() {
             <Link to="/upload">Upload</Link>
 
             <div className="menu" ref={menuRef}>
-              <button className="avatar-btn" onClick={() => setMenuOpen(!menuOpen)}>
+              <button
+                className="avatar-btn"
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
                 {firstLetter}
               </button>
 
@@ -65,9 +72,11 @@ function Navbar() {
                   <button onClick={() => navigate("/profile")}>
                     <FaUser /> Profile
                   </button>
+
                   <button onClick={toggleDarkMode}>
                     <FaMoon /> Dark Mode
                   </button>
+
                   <button onClick={logout}>
                     <FaSignOutAlt /> Logout
                   </button>
@@ -81,4 +90,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;x
+export default Navbar;

@@ -21,6 +21,12 @@ function Register() {
     try {
       const res = await api.post("/auth/register", form);
       alert(res.data.message);
+
+      setForm({
+        name: "",
+        email: "",
+        password: "",
+      });
     } catch (err) {
       alert(err.response?.data?.message || "Registration Failed");
     }
@@ -28,18 +34,33 @@ function Register() {
 
   return (
     <div className="page">
-      <h2>Create Account</h2>
+      <h1>Create Account</h1>
 
       <div className="card">
         <form onSubmit={handleSubmit}>
-          <input type="text" name="name" placeholder="Name" onChange={handleChange} />
-          <br /><br />
+          <input
+            type="text"
+            name="name"
+            placeholder="Name"
+            value={form.name}
+            onChange={handleChange}
+          />
 
-          <input type="email" name="email" placeholder="Email" onChange={handleChange} />
-          <br /><br />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={handleChange}
+          />
 
-          <input type="password" name="password" placeholder="Password" onChange={handleChange} />
-          <br /><br />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+          />
 
           <button type="submit">Register</button>
         </form>
@@ -49,3 +70,4 @@ function Register() {
 }
 
 export default Register;
+

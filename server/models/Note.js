@@ -5,8 +5,15 @@ const noteSchema = new mongoose.Schema(
     title: String,
     subject: String,
     description: String,
-    fileName: String,
-    filePath: String,
+    content: String,
+
+    files: [
+      {
+        fileName: String,
+        filePath: String,
+      },
+    ],
+
     uploadedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

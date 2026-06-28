@@ -576,3 +576,40 @@ button:hover,
     max-width: 100%;
   }
 }
+.file-viewer {
+  margin-top: 15px;
+}
+
+.file-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.file-nav button {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.file-label {
+  font-size: 12px;
+  color: #666;
+  font-weight: 600;
+}
+.file-list {
+  margin-top: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.file-list a {
+  font-size: 13px;
+  background: #dbeafe;
+  color: #1e40af;
+  padding: 7px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+}
