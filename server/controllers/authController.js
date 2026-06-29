@@ -7,73 +7,113 @@ const generateOTP = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
-// Register
 const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
 
     const userExists = await User.findOne({
       email: email.toLowerCase().trim(),
     });
 
     if (userExists) {
-      return res.status(400).json({
-        message: "User already exists",
-      });
+      return res.status(400).json({ message: "User already exists" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
     const otp = generateOTP();
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
       name: name.trim(),
       email: email.toLowerCase().trim(),
       password: hashedPassword,
+      isVerified: false,
       otp,
       otpExpires: Date.now() + 10 * 60 * 1000,
-      isVerified: false,
     });
 
     await sendEmail(
       user.email,
       "NoteHub Email Verification OTP",
-      `Your OTP is ${otp}. It is valid for 10 minutes.`
+      `Your NoteHub OTP is ${otp}. It is valid for 10 minutes.`
     );
 
     res.status(201).json({
-      message: "Registration successful. Please verify your email.",
+      message: "OTP sent to your email. Please verify your account.",
+      email: user.email,
     });
-
   } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      message: error.message,
-    });
+    console.error("Register Error:", error);
+    res.status(500).json({ message: error.message });
   }
 };
 
-// Login
-const login = async (req, res) => {
+const verifyOTP = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, otp } = req.body;
+
+    if (!email || !otp) {
+      return res.status(400).json({ message: "Email and OTP are required" });
+    }
 
     const user = await User.findOne({
       email: email.toLowerCase().trim(),
     });
 
     if (!user) {
-      return res.status(400).json({
-        message: "Invalid Email",
-      });
+      return res.status(400).json({ message: "User not found" });
     }
 
-    const match = await bcrypt.compare(password, user.password);
+    if (user.isVerified) {
+      return res.status(400).json({ message: "User already verified" });
+    }
 
-    if (!match) {
-      return res.status(400).json({
-        message: "Invalid Password",
-      });
+    if (user.otp !== otp.trim()) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+
+    if (user.otpExpires < Date.now()) {
+      return res.status(400).json({ message: "OTP expired" });
+    }
+
+    user.isVerified = true;
+    user.otp = undefined;
+    user.otpExpires = undefined;
+
+    await user.save();
+
+    res.json({
+      message: "Email verified successfully. You can now login.",
+    });
+  } catch (error) {
+    console.error("Verify OTP Error:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password required" });
+    }
+
+    const user = await User.findOne({
+      email: email.toLowerCase().trim(),
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid Email" });
+    }
+
+    const checkPassword = await bcrypt.compare(password, user.password);
+
+    if (!checkPassword) {
+      return res.status(400).json({ message: "Invalid Password" });
     }
 
     if (!user.isVerified) {
@@ -87,21 +127,18 @@ const login = async (req, res) => {
       await sendEmail(
         user.email,
         "NoteHub Email Verification OTP",
-        `Your OTP is ${otp}. It is valid for 10 minutes.`
+        `Your NoteHub OTP is ${otp}. It is valid for 10 minutes.`
       );
 
       return res.status(400).json({
         message: "Please verify your email before login",
+        email: user.email,
       });
     }
 
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "7d",
-      }
-    );
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
 
     res.json({
       message: "Login Successful",
@@ -112,16 +149,14 @@ const login = async (req, res) => {
         email: user.email,
       },
     });
-
   } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      message: error.message,
-    });
+    console.error("Login Error:", error);
+    res.status(500).json({ message: error.message });
   }
 };
 
 module.exports = {
   register,
+  verifyOTP,
   login,
 };
