@@ -10,6 +10,8 @@ function Login() {
     password: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -20,7 +22,11 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (loading) return;
+
     try {
+      setLoading(true);
+
       const res = await api.post("/auth/login", form);
 
       localStorage.setItem("token", res.data.token);
@@ -32,7 +38,8 @@ function Login() {
     } catch (err) {
       const message = err.response?.data?.message || "Login Failed";
 
-if (message.includes("Please verify your email")) {        alert(message);
+      if (message.includes("Please verify your email")) {
+        alert(message);
 
         navigate("/verify-otp", {
           state: {
@@ -44,6 +51,8 @@ if (message.includes("Please verify your email")) {        alert(message);
       }
 
       alert(message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,6 +68,7 @@ if (message.includes("Please verify your email")) {        alert(message);
             placeholder="Email"
             value={form.email}
             onChange={handleChange}
+            required
           />
 
           <br />
@@ -70,12 +80,15 @@ if (message.includes("Please verify your email")) {        alert(message);
             placeholder="Password"
             value={form.password}
             onChange={handleChange}
+            required
           />
 
           <br />
           <br />
 
-          <button type="submit">Login</button>
+          <button type="submit" disabled={loading}>
+            {loading ? "Please wait..." : "Login"}
+          </button>
         </form>
       </div>
     </div>
