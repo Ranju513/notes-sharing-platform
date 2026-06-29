@@ -6,7 +6,6 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Upload from "./pages/Upload";
 import Profile from "./pages/Profile";
-import VerifyOTP from "./pages/VerifyOTP";
 
 function App() {
   return (
@@ -19,7 +18,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/upload" element={<Upload />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/verify-otp" element={<VerifyOTP />} />
       </Routes>
 
       <Footer />
