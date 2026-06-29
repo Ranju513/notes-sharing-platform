@@ -1,3 +1,4 @@
+import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   FaBook,
@@ -10,6 +11,11 @@ import {
 import api from "../services/api";
 
 function Home() {
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (!user) {
+  return <Navigate to="/login" />;
+}
   const [notes, setNotes] = useState([]);
   const [search, setSearch] = useState("");
   const [openFiles, setOpenFiles] = useState(null);
