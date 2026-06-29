@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const path = require("path");
 require("dotenv").config();
 
 const authRoutes = require("./routes/authRoutes");
@@ -12,10 +13,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Serve uploaded files
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/notes", noteRoutes);
-app.use("/uploads", express.static("uploads"));
 
 // Test Route
 app.get("/", (req, res) => {
@@ -38,3 +41,4 @@ const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
+
