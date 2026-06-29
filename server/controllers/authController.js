@@ -51,11 +51,21 @@ const register = async (req, res) => {
       otpExpires: Date.now() + 10 * 60 * 1000,
     });
 
-    await sendEmail(
-      normalizedEmail,
+      
+
+ await sendEmail(
+
+    normalizedEmail,
+
       "NoteHub Email Verification OTP",
-      `Your NoteHub verification OTP is ${otp}. It is valid for 10 minutes.`
+
+     `Your NoteHub verification OTP is ${otp}. It is valid for 10 minutes.`
+
     );
+
+    
+
+    res.status(201).json({
 
     res.status(201).json({
       message: "OTP sent to your email. Please verify your account.",
@@ -146,11 +156,11 @@ if (!user.isVerified) {
 
   await user.save();
 
-  await sendEmail(
-    user.email,
-    "NoteHub Email Verification OTP",
-    `Your NoteHub verification OTP is ${otp}. It is valid for 10 minutes.`
-  );
+ // await sendEmail(
+   // user.email,
+   // "NoteHub Email Verification OTP",
+   // `Your NoteHub verification OTP is ${otp}. It is valid for 10 minutes.`
+ // );
 
   return res.status(400).json({
     message: "Please verify your email before login. OTP sent again.",
