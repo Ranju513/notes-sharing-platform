@@ -48,8 +48,6 @@ function Navbar() {
       <h1>📚 Notes Sharing Platform</h1>
 
       <div className="nav-links">
-        <Link to="/">Home</Link>
-
         {!user ? (
           <>
             <Link to="/register">Register</Link>
@@ -57,6 +55,7 @@ function Navbar() {
           </>
         ) : (
           <>
+            <Link to="/">Home</Link>
             <Link to="/upload">Upload</Link>
 
             <div className="menu" ref={menuRef}>

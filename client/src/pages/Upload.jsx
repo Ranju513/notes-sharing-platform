@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import api from "../services/api";
 
 function Upload() {
+const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [subject, setSubject] = useState("");
   const [description, setDescription] = useState("");
@@ -36,6 +37,7 @@ function Upload() {
 
       setTitle("");
       setSubject("");
+setLoading(true);
       setDescription("");
       setContent("");
       setFiles([]);
@@ -50,6 +52,15 @@ function Upload() {
   };
 
   return (
+{loading && (
+  <div className="loading-overlay">
+    <div className="loading-box">
+      <div className="spinner"></div>
+      <h3>Please wait...</h3>
+      <p>Uploading your notes. Do not close this page.</p>
+    </div>
+  </div>
+)}
     <div className="page">
       <div className="hero">
         <h1>📤 Upload Notes</h1>
