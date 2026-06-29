@@ -15,30 +15,11 @@ function App() {
       <Navbar />
 
       <Routes>
-        <Route
-          path="/"
-          element={user ? <Home /> : <Navigate to="/login" />}
-        />
-
-        <Route
-          path="/upload"
-          element={user ? <Upload /> : <Navigate to="/login" />}
-        />
-
-        <Route
-          path="/profile"
-          element={user ? <Profile /> : <Navigate to="/login" />}
-        />
-
-        <Route
-          path="/register"
-          element={!user ? <Register /> : <Navigate to="/" />}
-        />
-
-        <Route
-          path="/login"
-          element={!user ? <Login /> : <Navigate to="/" />}
-        />
+        <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
+        <Route path="/upload" element={user ? <Upload /> : <Navigate to="/login" />} />
+        <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" />} />
+        <Route path="/register" element={!user ? <Register /> : <Navigate to="/" />} />
+        <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
       </Routes>
 
       <Footer />

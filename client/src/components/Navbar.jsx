@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from "react";
 
 function Navbar() {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
+  const user = JSON.parse(localStorage.getItem("user"));
   const firstLetter = user?.name?.charAt(0).toUpperCase();
 
   useEffect(() => {
@@ -25,7 +25,10 @@ function Navbar() {
 
   const toggleDarkMode = () => {
     document.body.classList.toggle("dark");
-    localStorage.setItem("darkMode", document.body.classList.contains("dark"));
+    localStorage.setItem(
+      "darkMode",
+      document.body.classList.contains("dark")
+    );
     setMenuOpen(false);
   };
 
@@ -90,4 +93,3 @@ function Navbar() {
 }
 
 export default Navbar;
- 
