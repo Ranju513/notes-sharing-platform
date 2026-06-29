@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
 function Register() {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -20,12 +23,13 @@ function Register() {
 
     try {
       const res = await api.post("/auth/register", form);
+
       alert(res.data.message);
 
-      setForm({
-        name: "",
-        email: "",
-        password: "",
+      navigate("/verify-otp", {
+        state: {
+          email: form.email,
+        },
       });
     } catch (err) {
       alert(err.response?.data?.message || "Registration Failed");
@@ -70,4 +74,3 @@ function Register() {
 }
 
 export default Register;
-
