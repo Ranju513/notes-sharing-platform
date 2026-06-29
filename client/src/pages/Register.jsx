@@ -23,14 +23,15 @@ function Register() {
 
     try {
       const res = await api.post("/auth/register", form);
-
       alert(res.data.message);
 
-      navigate("/verify-otp", {
-        state: {
-          email: form.email,
-        },
+      setForm({
+        name: "",
+        email: "",
+        password: "",
       });
+
+      navigate("/login");
     } catch (err) {
       alert(err.response?.data?.message || "Registration Failed");
     }
@@ -48,6 +49,7 @@ function Register() {
             placeholder="Name"
             value={form.name}
             onChange={handleChange}
+            required
           />
 
           <input
@@ -56,6 +58,7 @@ function Register() {
             placeholder="Email"
             value={form.email}
             onChange={handleChange}
+            required
           />
 
           <input
@@ -64,6 +67,7 @@ function Register() {
             placeholder="Password"
             value={form.password}
             onChange={handleChange}
+            required
           />
 
           <button type="submit">Register</button>
@@ -74,3 +78,4 @@ function Register() {
 }
 
 export default Register;
+
