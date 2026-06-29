@@ -106,8 +106,6 @@ JWT_SECRET=your_secret_key
 - Upload Notes
 - Profile Page
 
-(Add screenshots after uploading to GitHub.)
-
 ---
 
 ## 👨‍💻 Author
