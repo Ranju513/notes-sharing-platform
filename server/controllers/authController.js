@@ -138,12 +138,24 @@ const login = async (req, res) => {
       });
     }
 
-    if (!user.isVerified) {
-      return res.status(400).json({
-        message: "Please verify your email before login",
-      });
-    }
+if (!user.isVerified) {
+  const otp = generateOTP();
 
+  user.otp = otp;
+  user.otpExpires = Date.now() + 10 * 60 * 1000;
+
+  await user.save();
+
+  await sendEmail(
+    user.email,
+    "NoteHub Email Verification OTP",
+    `Your NoteHub verification OTP is ${otp}. It is valid for 10 minutes.`
+  );
+
+  return res.status(400).json({
+    message: "Please verify your email before login. OTP sent again.",
+  });
+}
     const checkPassword = await bcrypt.compare(password, user.password);
 
     if (!checkPassword) {
