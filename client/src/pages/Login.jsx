@@ -4,6 +4,7 @@ import api from "../services/api";
 
 function Login() {
   const navigate = useNavigate();
+
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -28,8 +29,22 @@ function Login() {
       alert(res.data.message);
       navigate("/");
       window.location.reload();
-  } catch (err) {
-      alert(err.response?.data?.message || "Login Failed");
+    } catch (err) {
+      const message = err.response?.data?.message || "Login Failed";
+
+      if (message === "Please verify your email before login") {
+        alert(message);
+
+        navigate("/verify-otp", {
+          state: {
+            email: form.email,
+          },
+        });
+
+        return;
+      }
+
+      alert(message);
     }
   };
 
@@ -43,19 +58,23 @@ function Login() {
             type="email"
             name="email"
             placeholder="Email"
+            value={form.email}
             onChange={handleChange}
           />
 
-          <br /><br />
+          <br />
+          <br />
 
           <input
             type="password"
             name="password"
             placeholder="Password"
+            value={form.password}
             onChange={handleChange}
           />
 
-          <br /><br />
+          <br />
+          <br />
 
           <button type="submit">Login</button>
         </form>
