@@ -32,8 +32,7 @@ function Login() {
     } catch (err) {
       const message = err.response?.data?.message || "Login Failed";
 
-      if (message === "Please verify your email before login") {
-        alert(message);
+if (message.includes("Please verify your email")) {        alert(message);
 
         navigate("/verify-otp", {
           state: {
